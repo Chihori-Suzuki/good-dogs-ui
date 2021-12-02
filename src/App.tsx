@@ -1,52 +1,53 @@
 import React, { useEffect, useState } from "react";
+// import axios from "axios";
 
 import "./App.css";
 
 function App() {
   const [dogsBreedName, setDogsBreedName] = useState([]);
+  const [breedDetails, setBreedDetails] = useState({});
+  const [showState, setShowState] = useState(false);
 
-  const fetchData = () => {
-    console.log("start");
-
-    fetch(
-      "https://good-dogs.m90cinjkfob4u.us-west-2.cs.amazonlightsail.com/dogs",
-      {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          // "Origin: http": "http://localhost:3000/",
-          // "Access-Control-Request-Method": "GET",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-    )
-      .then((res) => {
-        console.log(res);
-
-        return res.json();
-      })
-
-      .then((data) => {
-        console.log("data", data);
-        setDogsBreedName(data);
-      })
+  const fetchBreed = () => {
+    fetch(`/api/dogs/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setDogsBreedName(data))
       .catch((err) => {
         console.log(err.message);
         console.log("error");
       });
+    console.log("dogsBreedName", dogsBreedName);
+  };
+  const fetchBreedDetail = async (name: string) => {
+    setShowState(true);
+    await fetch(`/api/dogs/${name}`)
+      .then((res) => res.json())
+      .then((data) => setBreedDetails(data))
+      .catch((err) => {
+        console.log(err.message);
+        console.log("error");
+      });
+    console.log("breedDetails", breedDetails);
   };
 
   useEffect(() => {
-    fetchData();
-  });
+    fetchBreed();
+  }, []);
+
   return (
     <div className="App">
-      <h2>Hello</h2>
-      {dogsBreedName.map((dog, index) => {
-        <p key={index}>aaa</p>;
-      })}
+      <h2 className="title">Dogs breed names</h2>
+      {dogsBreedName.map((dog: any, index) => (
+        <button key={index} onClick={() => fetchBreedDetail(dog.name)}>
+          {dog.name}
+        </button>
+      ))}
+      {showState ? <p>{breedDetails}</p> : null}
     </div>
   );
 }
