@@ -10,6 +10,9 @@ button {
   background-color: white;
   color: #282c34;
 }
+button:hover {
+  background-color: #cedfff;
+}
 
 p {
   text-align: center;

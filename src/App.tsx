@@ -34,13 +34,18 @@ function App() {
 
   return (
     <div className="App">
-      <h2 className="title">Dogs breed names</h2>
+      <h2 className="title">Dogs Breed Names</h2>
       {dogsBreedName.map((dog: any, index) => (
         <button key={index} onClick={() => fetchBreedDetail(dog.name)}>
           {dog.name}
         </button>
       ))}
-      {showState ? <p>{JSON.stringify(breedDetails)}</p> : null}
+      {showState ? (
+        <>
+          <h2 className="title">Dogs Breed Details</h2>
+          <p>{JSON.stringify(breedDetails)}</p>{" "}
+        </>
+      ) : null}
     </div>
   );
 }
