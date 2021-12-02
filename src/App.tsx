@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
 import "./App.css";
+import _ from "lodash";
 
 function App() {
   const [dogsBreedName, setDogsBreedName] = useState([]);
   const [breedDetails, setBreedDetails] = useState({});
   const [showState, setShowState] = useState(false);
 
-  const fetchBreed = () => {
-    fetch(`/api/dogs/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
+  const fetchBreed = async () => {
+    await fetch("/api/dogs")
       .then((res) => res.json())
       .then((data) => setDogsBreedName(data))
       .catch((err) => {
         console.log(err.message);
         console.log("error");
       });
-    console.log("dogsBreedName", dogsBreedName);
   };
   const fetchBreedDetail = async (name: string) => {
     setShowState(true);
@@ -32,7 +25,7 @@ function App() {
         console.log(err.message);
         console.log("error");
       });
-    console.log("breedDetails", breedDetails);
+    console.log(breedDetails);
   };
 
   useEffect(() => {
@@ -47,7 +40,7 @@ function App() {
           {dog.name}
         </button>
       ))}
-      {showState ? <p>{breedDetails}</p> : null}
+      {showState ? <p>{JSON.stringify(breedDetails)}</p> : null}
     </div>
   );
 }
